@@ -1,0 +1,16 @@
+#!/bin/sh
+
+f=3 b=4
+for j in f b; do
+  for i in {0..7}; do
+    printf -v $j$i %b "\e[${!j}${i}m"
+  done
+done
+B=$'\e[1m';R=$'\e[0m';I=$'\e[7m';C=$(crux);P=$(pkginfo -i | wc -l);K=$(uname -rmo);U=$USER;H=$(hostname);S=$SHELL;
+cat << EOF
+  $f1(っ＾▿＾)っ $f0$B$C
+ $f2(ɔ^-^)ɔ $f4$B$P$f7 Packages $f3ᕙ(^▿^-ᕙ)
+ $f6ᕙ(^▿^)ᕗ $f5$K
+ $f7ヽ('ー')人('∇')ノ$f3$U$f0@$f2$H$f1ヽ('▭')
+  $f0(●‿●)︵ヽ$f6$S $f4ヽ(˘◡˘ )$R
+EOF

@@ -1,0 +1,3 @@
+#!/bin/sh
+
+vim -R -c ":set foldmethod=indent" -c ":set foldnestmax=2" -c ":set foldenable" -c ":Man $1" -c ":normal " -c ":q" -c ":set nomodifiable" -c ":map q :q<CR>” -c ":map <space> "

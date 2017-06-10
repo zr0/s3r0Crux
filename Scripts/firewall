@@ -1,0 +1,9 @@
+#!/bin/bash
+
+### Firewall accept only SSH and drop all :D
+
+#
+          iptables -A INPUT -j ACCEPT -p tcp --destination-port 22 -i wlan0
+#
+          iptables -A INPUT -j DROP -p tcp -i wlan0
+#

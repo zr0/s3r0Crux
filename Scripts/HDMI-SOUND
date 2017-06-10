@@ -1,0 +1,147 @@
+#!/bin/bash
+
+# Check if we are executing as root
+if [ $UID != 0 ]; then
+    echo "This script must be run as root."; exit
+fi
+
+# The nvidia driver cannot be loaded while we are configuring the GPU.
+# Check whether the nvidia kernel is loaded:
+if grep nvidia /proc/modules; then
+    # It is. Check if we have HDMI audio
+    if lspci | grep 01:00.1; then
+        # Yes, so we are already done.
+        echo "The following list should contain HDMI audio devices"
+        aplay -l
+        alsa reload
+        echo "--> You are done!"; exit
+    else
+        # No, disable output through nvidia:
+        prime-select intel
+        echo "Please reboot. Afterwards rerun this script."; exit
+    fi
+fi
+
+# Make sure that the GPU is powered
+if ! lspci -H1 | grep 01:00.0; then
+    if ! grep OFF /proc/acpi/bbswitch; then
+        echo "ERROR: GPU is listed in lspci -H1, but bbswitch thinks it is off"; exit 1
+    fi
+    # Turn on the discrete GPU (to get it listed in `lspci -H1`)
+    echo ON > /proc/acpi/bbswitch
+    if ! grep ON /proc/acpi/bbswitch; then
+        echo "ERROR: Failed to turn on the GPU"; exit 1
+    fi
+fi
+
+# Check if the GPU's audio chip is powered
+if ! lspci -H1 | grep 01:00.1; then
+    echo "Suspend the pc and resume it again. This will turn on the audio chip on the discrete GPU. Afterwards rerun this script."; exit
+fi
+
+# The output of 'lscpi -H1' should now contain 2 lines similar to:
+# 01:00.0 VGA compatible controller: NVIDIA Corporation GF116M [GeForce GT 555M/635M] (rev a1)
+# 01:00.1 Audio device: NVIDIA Corporation GF116 High Definition Audio Controller (rev a1)
+
+# Now we need to rescan for the GPU such that the audio chip is found as well
+if lspci | grep 01:00.0; then
+    # Now we 'unmount' the GPU
+    # the nvidia driver is not loaded, otherwise this step would eventualy cause your computer to freeze/hang
+    echo 1 > /sys/bus/pci/devices/0000\:01\:00.0/remove
+    # Wait a bit
+    sleep 1
+    # Check if this succeeded
+    if ! lspci | grep 01:00.0; then
+        echo "ERROR: Failed to remove the GPU (or so it seems, you can try again)"; exit 1
+    fi
+fi
+
+if ! lspci | grep 01:00.0; then
+    # Rescan
+    echo 1 > /sys/bus/pci/rescan
+    if ! lspci | grep 01:00.1; then
+        echo "ERROR: Rescan did not find the audio chip"; exit 1
+    fi
+
+    # The output of 'lspci' should now contain 2 lines similar to:
+    # 01:00.0 VGA compatible controller: NVIDIA Corporation GF116M [GeForce GT 555M/635M] (rev a1)
+    # 01:00.1 Audio device: NVIDIA Corporation GF116 High Definition Audio Controller (rev a1)
+
+    # Now we are ready to restart X11 using the nvidia driver
+    prime-select nvidia
+    echo "Please log out and in again. Afterwards rerun this script."; exit
+fi
+#!/bin/bash
+
+# Check if we are executing as root
+if [ $UID != 0 ]; then
+    echo "This script must be run as root."; exit
+fi
+
+# The nvidia driver cannot be loaded while we are configuring the GPU.
+# Check whether the nvidia kernel is loaded:
+if grep nvidia /proc/modules; then
+    # It is. Check if we have HDMI audio
+    if lspci | grep 01:00.1; then
+        # Yes, so we are already done.
+        echo "The following list should contain HDMI audio devices"
+        aplay -l
+        alsa reload
+        echo "--> You are done!"; exit
+    else
+        # No, disable output through nvidia:
+        prime-select intel
+        echo "Please reboot. Afterwards rerun this script."; exit
+    fi
+fi
+
+# Make sure that the GPU is powered
+if ! lspci -H1 | grep 01:00.0; then
+    if ! grep OFF /proc/acpi/bbswitch; then
+        echo "ERROR: GPU is listed in lspci -H1, but bbswitch thinks it is off"; exit 1
+    fi
+    # Turn on the discrete GPU (to get it listed in `lspci -H1`)
+    echo ON > /proc/acpi/bbswitch
+    if ! grep ON /proc/acpi/bbswitch; then
+        echo "ERROR: Failed to turn on the GPU"; exit 1
+    fi
+fi
+
+# Check if the GPU's audio chip is powered
+if ! lspci -H1 | grep 01:00.1; then
+    echo "Suspend the pc and resume it again. This will turn on the audio chip on the discrete GPU. Afterwards rerun this script."; exit
+fi
+
+# The output of 'lscpi -H1' should now contain 2 lines similar to:
+# 01:00.0 VGA compatible controller: NVIDIA Corporation GF116M [GeForce GT 555M/635M] (rev a1)
+# 01:00.1 Audio device: NVIDIA Corporation GF116 High Definition Audio Controller (rev a1)
+
+# Now we need to rescan for the GPU such that the audio chip is found as well
+if lspci | grep 01:00.0; then
+    # Now we 'unmount' the GPU
+    # the nvidia driver is not loaded, otherwise this step would eventualy cause your computer to freeze/hang
+    echo 1 > /sys/bus/pci/devices/0000\:01\:00.0/remove
+    # Wait a bit
+    sleep 1
+    # Check if this succeeded
+    if ! lspci | grep 01:00.0; then
+        echo "ERROR: Failed to remove the GPU (or so it seems, you can try again)"; exit 1
+    fi
+fi
+
+if ! lspci | grep 01:00.0; then
+    # Rescan
+    echo 1 > /sys/bus/pci/rescan
+    if ! lspci | grep 01:00.1; then
+        echo "ERROR: Rescan did not find the audio chip"; exit 1
+    fi
+
+    # The output of 'lspci' should now contain 2 lines similar to:
+    # 01:00.0 VGA compatible controller: NVIDIA Corporation GF116M [GeForce GT 555M/635M] (rev a1)
+    # 01:00.1 Audio device: NVIDIA Corporation GF116 High Definition Audio Controller (rev a1)
+
+    # Now we are ready to restart X11 using the nvidia driver
+    prime-select nvidia
+    echo "Please log out and in again. Afterwards rerun this script."; exit
+fi
+
