@@ -1,0 +1,44 @@
+Section "Device"
+    Identifier     "nvidia"
+    Driver         "nvidia"
+    BusID          "PCI:1:0:0"
+    Option         "DynamicTwinView" "False"
+    Option         "NoFlip" "false"
+    Option         "NoLogo" "true"
+    Option         "ConnectToAcpid" "0"
+    Option         "HWCursor" "false"
+# To put Xorg in debug mode change "false" to "true" in the line below:
+    Option         "ModeDebug" "false" 
+EndSection
+
+Section "Module"
+    Load           "glx"
+EndSection
+    
+Section "Monitor"
+    # 1920x1080p @ 60Hz 
+    Identifier     "Monitor0"
+    VendorName     "Unknown"
+    ModelName      "Unknown"
+    HorizSync      26-81
+    VertRefresh    24-75
+EndSection
+
+Section "Screen"
+    Identifier     "Screen0"
+    Device         "nvidia0"
+    Monitor        "Monitor0"
+    Option         "ColorRange" "Full"
+    Option         "ColorSpace" "RGB"
+    DefaultDepth    24
+    Option         "ModeValidation" "NoVesaModes, NoXServerModes"
+    Option         "ExactModeTimingsDVI" "True"
+    SubSection     "Display"
+       Depth       24
+       Modes      "1920x1080"
+    EndSubSection
+EndSection
+
+Section "Extensions"
+    Option	   "Composite" "Enable"
+EndSection
