@@ -1,0 +1,53 @@
+!!! Xdefaults - Crux 
+!-----------------------------------------------------
+
+#include "/home/s3r0/Colors/black_flag_color"
+
+!!!Config Urxvt!!!
+!-----------------------------------------------------
+!#URxvt.depth: 32
+!#URxvt.transparent: true
+!#URxvt.shading: 20
+
+URxvt.font: xft: neoxis :pixelsize=10
+URxvt.boldFont: xft: neoxis :pixelsize=10
+
+#URxvt.font: -vc-bleed2-medium-*-semicondensed-*-11-100-75-75-*-50-iso8859-15
+#URxvt.boldFont: -vc-bleed2-medium-*-semicondensed-*-11-100-75-75-*-50-iso8859-15
+
+#urxvt*font: -xos4-terminus-medium-r-normal--12-120-72-72-c-60-iso8859-1
+#urxvt*boldFont: -xos4-terminus-medium-r-normal--12-120-72-72-c-60-iso8859-1
+#urxvt*italicFont: -xos4-terminus-medium-r-normal--12-120-72-72-c-60-iso8859-1
+#urxvt*bolditalicFont: -xos4-terminus-medium-r-normal--12-120-72-72-c-60-iso8859-1
+
+
+URxvt.geometry: 80x21
+URxvt.scrollBar: false
+#URxvt.secondaryScroll: true
+#URxvt.scrollBar_right: true
+#URxvt.scrollBar_floating: true
+#URxvt.scrollstyle: plain
+!#URxvt.scrollColor: #252525
+!#URxvt.cursorColor: #1C1C23
+URxvt.locale: utf8
+!------------------------------------------------------
+
+
+!!! Copy Paste
+!------------------------------------------------------
+#URxvt.perl-lib: /usr/lib/urxvt/perl/clipboard-osc
+#URxvt.perl-ext-common: /usr/lib/urxvt/perl/clipboard-osc
+#URxvt.keysym.Ctrl-c:   perl:clipboard:copy
+#URxvt.keysym.Ctrl-v:   perl:clipboard:paste
+#URxvt.keysym.M-C-v: perl:clipboard:paste_escaped
+URxvt.clipboard.copycmd:  xsel -ib
+URxvt.clipboard.pastecmd: xsel -ob
+
+
+
+!!! UTF-8
+!-----------------------------------------------------
+!#*wideChars: true
+!#*locale: true
+!#*utf8: 1
+!#*vt100Graphics: true
