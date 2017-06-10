@@ -1,0 +1,29 @@
+body {
+  #background-image: url("crux.png");
+  background-color: #08090a;
+  font-family: neoxis;
+  font-size: 7;
+  font-weight: normal;
+  margin-left: 7%;
+}
+a:link,a:visited,a:active {
+  text-decoration: none;
+  color: #5a2c2d;
+  font-weight: normal;
+}
+a:hover {
+  text-decoration: underline;
+  color: #344633;
+  font-weight: normal;
+}
+table {
+  border-spacing: 8px;
+}
+td:first-child {
+  font-weight: normal;
+  color: #606c78; 
+}
+td:nth-child(2) {
+  font-weight: normal;
+  color: #344633;
+}
